@@ -993,6 +993,36 @@ main.enter .hstats{animation:riseIn .7s var(--ease) .15s both}
 .pplb{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 16px;font-size:14px;font-weight:700;color:var(--ink)}
 .pplb:hover{border-color:var(--acc);background:var(--acc-s)}
 .localbar .linkbtn{background:none;border:0;padding:0;margin-left:8px;color:inherit;font-weight:700;text-decoration:underline}
+/* 머리 메뉴가 넘치지 않게 · 버전 단추는 아래 띠로 */
+.head .wrap{height:auto;min-height:68px;padding-block:8px;flex-wrap:wrap;row-gap:4px}
+.head .menu{flex-wrap:wrap;row-gap:4px}
+.head .menu button,.head .mg>button{padding:8px 12px}
+.vbar .vdd{margin:0}
+.vbar .verbtn{border:1px solid var(--line);background:var(--surface);color:var(--ink);padding:5px 12px;border-radius:9px}
+.vbar .verbtn.mine{border-color:var(--acc);background:var(--surface)}
+.vbar .vb-k{color:var(--muted)}
+.vbar .vmenu{left:0;right:auto;transform-origin:top left}
+/* 담당자 이름 칸 */
+.gchips{flex-basis:100%;margin-top:6px}
+.pchips{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.pc-l{font-size:12px;font-weight:700;color:var(--muted);margin-right:2px}
+.pchip{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:10px;padding:7px 14px;font-size:13.5px;font-weight:600;transition:background .2s,border-color .2s,color .2s}
+.pchip:hover{border-color:var(--acc)}
+.pchip.on{background:var(--acc);border-color:var(--acc);color:#fff}
+.pchip.fin.on{background:#0E9F87;border-color:#0E9F87}
+.pchip small{font-size:10.5px;font-weight:700;background:rgba(224,123,0,.15);color:#B86200;border-radius:5px;padding:0 5px}
+.pchip.on small{background:rgba(255,255,255,.25);color:#fff}
+.pc-f{width:8px;height:8px;border-radius:2px;background:#0E9F87}
+.pchip.on .pc-f{background:#fff}
+.pchip.add{border-style:dashed;color:var(--acc-t);background:none}
+.pc-sep{width:1px;height:22px;background:var(--line);margin:0 6px}
+.pc-hint{font-size:12.5px;color:var(--muted);margin-left:4px}
+.pinfo{display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap;margin-top:10px;font-size:12.5px}
+.pi-t{color:var(--muted)}
+.vlink.del{color:#B4303E}
+.vstrip{background:var(--surface);border-bottom:1px solid var(--line2)}
+.vstrip .wrap{padding-block:12px}
+.gtitle{flex-wrap:wrap}
 select.pend{border-color:#E07B00!important;background:#FFF4DE!important}
 </style>
 </head>
@@ -1420,7 +1450,7 @@ function header(vis){
   return `<header class="head"><div class="wrap">
    <button class="logo" data-act="nav" data-id="${vis[0]?vis[0].id:''}" aria-label="처음으로"><span class="mk" aria-hidden="true"></span><span><span class="lt" style="display:block">${esc(S.brand.title)}</span><span class="ls">${esc(S.brand.sub)}</span></span></button>
    <nav class="menu" aria-label="메뉴">${links}</nav>
-   <div class="hright icons">${verMenu()}
+   <div class="hright icons">
     ${ce&&u?ib('edit','edit',E()?'편집 끝내기':'편집하기','',E()):''}
     ${can('menus')?ib('panel','palette','디자인 · 메뉴 설정','data-v="menus"',ui.panel==='menus'):''}
     ${can('export')?`<div class="dd">${ib('dd','save','저장 · 내보내기',`aria-expanded="${ui.dd}"`,ui.dd)}${ui.dd?`<div class="dd-menu"><div class="um-h"><b>${Cloud.on?(ui.saving?'저장 중…':Cloud.err?'저장 안 됨':'모두 저장됨'):'미리보기 모드'}</b><span>${Cloud.on?'고친 내용은 지금 보는 버전에 바로 저장됩니다':'이 브라우저에만 저장됩니다'}</span></div><hr><button data-act="panel" data-v="hist">날짜별 저장 기록</button><button data-act="save-now">지금 바로 저장</button><hr><button data-act="export-json">백업 파일 내려받기</button><button data-act="export-html">HTML 파일로 내려받기 (보관용)</button>${can('perm')?'<button data-act="import-json">백업 파일 불러오기</button><hr><button data-act="reset">처음 상태로 되돌리기</button>':''}</div>`:''}</div>`:''}
@@ -1580,7 +1610,7 @@ function roadmap(m,p){
       return `${g}<div class="gcourse has-tools">${tools(q+'.courses',ci)}<div class="gc-t">${T(cq+'.title','span','','과정명',{keep:1})}${okMark(cq,c)}</div>${T(cq+'.old','div','g-old','기존 과정명 (선택)')}${T(cq+'.hours','div','gc-h','시수 (선택)')}${T(cq+'.desc','p','g-desc','설명')}${notes?`<ul class="g-notes">${notes}</ul>`:''}${E()?addBtn(cq+'.notes','note','줄 추가','inline'):''}${T(cq+'.memo','span','memo','메모 (선택)')}${E()?`<div class="ed-field"><span>구분</span>${T(cq+'.group','span','','구분 제목 (선택)',{rr:1})}</div>`:''}</div>`}).join('');
     return `<section class="gcol has-tools" style="--c:${esc(s.color)}">${tools(p+'.studios',si)}<div class="gch">${E()?`<input type="color" class="ccolor gcolor" aria-label="스튜디오 색" data-p="${q}.color" value="${esc(s.color)}">`:''}${(()=>{const pg=pageFor(s.id);return pg?`<button class="gch-link" data-act="studio-page" data-sid="${s.id}">설명자료 →</button>`:(E()&&can('menus')?`<button class="gch-link mk" data-act="studio-page" data-sid="${s.id}">＋ 학과 페이지 만들기</button>`:'')})()}<div class="gch-n">${T(q+'.name','span','','이름',{keep:1})}${T(q+'.sub','span','gch-s','부제')}</div>${T(q+'.badge','span','gch-b','안내 배지 (선택)')}${T(q+'.memo','span','memo','메모 (선택)')}</div><div class="gcb">${cs}${addBtn(q+'.courses','course','과정 추가')}</div></section>`}).join('');
   return `${hero(p,meta)}<div class="gwrap">
-   <div class="gtitle">${T(p+'.boardTitle','h2','','보드 제목',{keep:1})}${T(p+'.boardSub','span','gsub','보드 설명')}${stg?'<div class="legend"><span><i class="lg-pin on"></i>확정</span><span><i class="lg-pin"></i>미확정</span></div>':''}<button class="cswitch ${stg?'on':''}" data-act="stage" role="switch" aria-checked="${stg}"><span class="kn" aria-hidden="true"></span>커리큘럼으로 보기</button></div>
+   <div class="gtitle">${T(p+'.boardTitle','h2','','보드 제목',{keep:1})}${T(p+'.boardSub','span','gsub','보드 설명')}${stg?'<div class="legend"><span><i class="lg-pin on"></i>확정</span><span><i class="lg-pin"></i>미확정</span></div>':''}<button class="cswitch ${stg?'on':''}" data-act="stage" role="switch" aria-checked="${stg}"><span class="kn" aria-hidden="true"></span>커리큘럼으로 보기</button>${Cloud.on&&!Cloud.needSetup&&Cloud.ready?`<div class="gchips">${verChips()}</div>`:''}</div>
    ${stg?stageLanes(m,p):`<div class="gboard-scroll" id="board" tabindex="0" aria-label="로드맵 보드, 좌우로 스크롤"><div class="gboard">
     <div class="gfound">${T(fq+'.label','div','gf-label','라벨',{keep:1})}${fc}${addBtn(fq+'.cards','fcard','파운데이션 추가')}</div>
     <div class="garrow" aria-hidden="true">→</div>${cols}${E()?`<button class="gcol-add" data-act="add" data-arr="${p}.studios" data-tpl="studio">＋ 스튜디오 추가</button>`:''}</div></div>`}
@@ -1722,11 +1752,11 @@ const siteStr=()=>JSON.stringify({brand:S.brand,roles:S.roles,defaultRole:S.defa
 const verStr=()=>JSON.stringify({menus:S.menus});
 function baseCan(k){const r=curRole();if(!r)return false;return r.id==='admin'||!!(r.perms&&r.perms[k])}
 function verEditable(){if(!Cloud.on)return true;const v=Cloud.versions[ui.vid];if(!v||!Cloud.user)return false;
-  if(v.vtype==='personal')return v.owner===Cloud.user.uid&&baseCan('edit');if(v.vtype==='final')return v.status==='draft'&&baseCan('merge');return false}
+  if(v.vtype==='personal')return baseCan('edit');if(v.vtype==='final')return v.status==='draft'&&baseCan('merge');return false}
 function isPending(){return Cloud.on&&Cloud.user&&Cloud.ready&&curUser()&&curUser().role==='pending'}
-function verLabel(v){if(!v)return '';if(v.vtype==='final')return v.title||'최종본';return (v.ownerName||'')+(Cloud.user&&v.owner===Cloud.user.uid?' (내 버전)':'')}
+function verLabel(v){if(!v)return '';if(v.vtype==='final')return v.title||'최종본';return v.ownerName||'이름 없음'}
 function finals(){return Object.entries(Cloud.versions).filter(([k,v])=>v.vtype==='final').sort((a,b)=>(b[1].at||0)-(a[1].at||0))}
-function personals(){return Object.entries(Cloud.versions).filter(([k,v])=>v.vtype==='personal').sort((a,b)=>{const me=Cloud.user&&Cloud.user.uid;return (b[1].owner===me)-(a[1].owner===me)||String(a[1].ownerName).localeCompare(String(b[1].ownerName),'ko')})}
+function personals(){return Object.entries(Cloud.versions).filter(([k,v])=>v.vtype==='personal').sort((a,b)=>(a[1].created||a[1].at||0)-(b[1].created||b[1].at||0))}
 function latestFinal(){const f=finals();return (f.find(x=>x[1].status==='done')||f[0]||[])[0]}
 function onSnap(q){
   let site=null;const vers={},members={};let merge=null;
@@ -1738,8 +1768,7 @@ function onSnap(q){
   if(site&&site.data!==Cloud.written.site){const sd=JSON.parse(site.data);S.brand=sd.brand||S.brand;S.roles=sd.roles||S.roles;S.defaultRole=sd.defaultRole||'pending';Cloud.written.site=site.data}
   ensureMember();
   const wasReady=Cloud.ready;Cloud.ready=true;Cloud.err='';
-  if(!isPending())ensureMyVersion();
-  if(!ui.vid||!Cloud.versions[ui.vid]||(!ui.vidPicked&&Cloud.versions[myVid()]&&ui.vid!==myVid()))ui.vid=Cloud.versions[myVid()]?myVid():latestFinal()||null;
+  if(!ui.vid||!Cloud.versions[ui.vid]){let last=null;try{last=localStorage.getItem(STORE+'-lastvid')}catch(e){}ui.vid=last&&Cloud.versions[last]?last:((personals()[0]||[])[0]||latestFinal()||null)}
   applyVersion(wasReady);
 }
 function applyVersion(wasReady){
@@ -1752,7 +1781,7 @@ function applyVersion(wasReady){
   if(busy&&wasReady&&Cloud.loadedVid===ui.vid){ui.pendingApply=apply;showSyncNote(true);return}
   const remote=wasReady&&Cloud.loadedVid===ui.vid;apply();if(remote)toast('다른 곳에서 고친 내용이 반영되었습니다');
 }
-function switchVersion(vid){if(!Cloud.on||!Cloud.versions[vid])return;ui.vidPicked=true;if(dirty)persist();ui.vid=vid;Cloud.loadedVid=null;ui.edit=false;ui.pendingApply=null;Cloud.histList=null;applyVersion(false);if(ui.menu==='__merge')ui.menu=null;render()}
+function switchVersion(vid){if(!Cloud.on||!Cloud.versions[vid])return;ui.vidPicked=true;try{localStorage.setItem(STORE+'-lastvid',vid)}catch(e){}if(dirty)persist();ui.vid=vid;Cloud.loadedVid=null;ui.edit=false;ui.pendingApply=null;Cloud.histList=null;applyVersion(false);if(ui.menu==='__merge')ui.menu=null;render()}
 async function seedCloud(){
   normAll();const now=Date.now(),by=myName();
   try{const b=Cloud.db.batch();
@@ -1770,21 +1799,29 @@ function ensureMember(){
   if(!ex)Cloud.members[u.uid]=doc;
   vdoc('member_'+u.uid).set(doc,{merge:true}).catch(e=>{Cloud.err=errText(e);render()});
 }
-let makingMine=false;
-function ensureMyVersion(){
-  const u=Cloud.user;if(!u||makingMine||Cloud.versions[myVid()])return;const src=latestFinal();if(!src)return;makingMine=true;
-  const now=Date.now();const doc={kind:'ver',vtype:'personal',owner:u.uid,ownerName:myName(),title:myName()+'의 버전',data:Cloud.versions[src].data,from:src,at:now,by:myName()};
-  Cloud.versions[myVid()]=doc;
-  vdoc('ver_'+myVid()).set(doc).then(()=>{makingMine=false}).catch(e=>{makingMine=false;Cloud.err=errText(e);render()});
+async function addPerson(){
+  const n=await askText('담당자 추가','로드맵을 따로 쓸 사람의 이름을 넣으세요. 최신 최종본 내용으로 시작합니다.','');if(n==null||!n.trim())return;
+  const name=n.trim();if(personals().some(([k,v])=>v.ownerName===name)){toast('같은 이름이 이미 있습니다');return}
+  const src=latestFinal();const now=Date.now(),id='n_'+now.toString(36);
+  const doc={kind:'ver',vtype:'personal',owner:Cloud.user?Cloud.user.uid:'',ownerName:name,title:name,data:src?Cloud.versions[src].data:verStr(),from:src||'',created:now,at:now,by:myName()};
+  Cloud.versions[id]=doc;await vdoc('ver_'+id).set(doc).catch(e=>toast(errText(e)));
+  switchVersion(id);toast(`'${name}' 로드맵을 만들었습니다`);
 }
+async function renamePerson(){const v=Cloud.versions[ui.vid];if(!v||v.vtype!=='personal')return;
+  const n=await askText('이름 바꾸기','',v.ownerName||'');if(n==null||!n.trim())return;
+  await vdoc('ver_'+ui.vid).set({ownerName:n.trim(),title:n.trim()},{merge:true}).catch(e=>toast(errText(e)))}
+async function deletePerson(){const v=Cloud.versions[ui.vid];if(!v||v.vtype!=='personal')return;
+  if(!(await ask('이 담당자 로드맵을 지울까요?',`'${esc(v.ownerName||'')}'의 로드맵이 목록에서 사라집니다. 지우기 전 내용은 저장 기록에 남겨 둡니다.`,'지우기')))return;
+  try{await saveHist(false,'지우기 전 자동 기록')}catch(e){}
+  const id=ui.vid;await vdoc('ver_'+id).delete().catch(e=>toast(errText(e)));delete Cloud.versions[id];
+  ui.vid=(personals()[0]||[])[0]||latestFinal();Cloud.loadedVid=null;applyVersion(false);toast('지웠습니다')}
 async function copyIntoMine(srcVid){
-  const src=Cloud.versions[srcVid];if(!src||!Cloud.user)return;
-  if(!(await ask('내 버전에 덮어쓸까요?',`'${esc(verLabel(src))}' 내용으로 내 버전이 바뀝니다. 지금 내 버전은 먼저 저장 기록에 남겨 두니 언제든 되돌릴 수 있습니다.`,'덮어쓰기')))return;
-  const prevVid=ui.vid;ui.vid=myVid();Cloud.loadedVid=myVid();
-  const mine=Cloud.versions[myVid()];if(mine){S.menus=JSON.parse(mine.data).menus;try{await saveHist(false,'덮어쓰기 전 자동 기록')}catch(e){}}
+  const cur=Cloud.versions[ui.vid],src=Cloud.versions[srcVid];if(!src||!cur||cur.vtype!=='personal')return;
+  if(!(await ask('다시 시작할까요?',`'${esc(verLabel(src))}' 내용으로 '${esc(cur.ownerName||'')}' 로드맵이 바뀝니다. 지금 내용은 먼저 저장 기록에 남겨 둡니다.`,'다시 시작')))return;
+  try{await saveHist(false,'다시 시작 전 자동 기록')}catch(e){}
   S.menus=JSON.parse(src.data).menus;normAll();
-  await vdoc('ver_'+myVid()).set({kind:'ver',vtype:'personal',owner:Cloud.user.uid,ownerName:myName(),title:myName()+'의 버전',data:verStr(),from:srcVid,at:Date.now(),by:myName()},{merge:true}).catch(e=>toast(errText(e)));
-  Cloud.written['ver_'+myVid()]=verStr();ui.edit=false;render();toast('내 버전에 가져왔습니다');
+  await vdoc('ver_'+ui.vid).set({data:verStr(),from:srcVid,at:Date.now(),by:myName()},{merge:true}).catch(e=>toast(errText(e)));
+  Cloud.written['ver_'+ui.vid]=verStr();ui.edit=false;render();toast('다시 시작했습니다');
 }
 function persist(force){
   clearTimeout(saveT);S.savedAt=Date.now();ensureIds(S.menus);
@@ -1836,19 +1873,22 @@ function histPanel(){
    ${Cloud.on&&!Cloud.needSetup?'':'<p class="hint">미리보기에서는 이 브라우저에 최근 20개만 남습니다.</p>'}</aside>`;
 }
 
-/* ---------- 버전 고르기 · 안내 띠 ---------- */
-function verMenu(){
+/* ---------- 담당자 이름 칸 ---------- */
+function verMenu(){return ''}
+function verChips(){
   if(!Cloud.on||Cloud.needSetup||!Cloud.ready||isPending())return '';
-  const v=Cloud.versions[ui.vid];const mine=v&&v.vtype==='personal'&&Cloud.user&&v.owner===Cloud.user.uid;
-  const item=([k,x])=>`<button data-act="ver" data-vid="${k}" class="${k===ui.vid?'cur':''}"><span class="vdot ${x.vtype==='final'?'f':''} ${x.status==='draft'?'d':''}"></span><span class="vm-n">${esc(verLabel(x))}${x.vtype==='final'&&x.status==='draft'?' · 초안':''}</span><span class="vm-t">${x.at?fmtAt(x.at):''}</span></button>`;
-  return `<div class="dd vdd"><button class="verbtn ${mine?'mine':''}" data-act="vdd" aria-expanded="${!!ui.vdd}" title="보는 버전 바꾸기"><span class="vb-k">${v&&v.vtype==='final'?'최종본':'보는 버전'}</span><span class="vb-n">${esc(v?(mine?'내 버전':verLabel(v)):'버전 없음')}</span><span aria-hidden="true">▾</span></button>${ui.vdd?`<div class="dd-menu vmenu"><div class="vm-h">담당자 개인본</div>${personals().map(item).join('')||'<p class="hint">아직 없음</p>'}<div class="vm-h">최종본</div>${finals().map(item).join('')}</div>`:''}</div>`;
+  const v=Cloud.versions[ui.vid];
+  const chip=([k,x])=>`<button class="pchip ${k===ui.vid?'on':''} ${x.vtype==='final'?'fin':''}" data-act="ver" data-vid="${k}" title="${x.at?'마지막 저장 '+fmtAt(x.at):''}">${x.vtype==='final'?'<span class="pc-f" aria-hidden="true"></span>':''}${esc(verLabel(x))}${x.vtype==='final'&&x.status==='draft'?'<small>초안</small>':''}</button>`;
+  const ps=personals(),fs=finals();
+  let info='';
+  if(v&&v.vtype==='personal')info=`<span class="pi-t">${esc(v.ownerName||'')} 로드맵${v.at?` · 저장 ${fmtAt(v.at)}`:''}</span>${baseCan('edit')&&latestFinal()?`<button class="vlink" data-act="ver-copy" data-vid="${latestFinal()}">최신 최종본으로 다시 시작</button>`:''}${baseCan('edit')?'<button class="vlink" data-act="p-ren">이름 바꾸기</button>':''}${baseCan('perm')?'<button class="vlink del" data-act="p-del">지우기</button>':''}`;
+  else if(v&&v.vtype==='final')info=`<span class="pi-t">${v.status==='draft'?'최종본 초안 · 관리자가 다듬는 중':'확정된 최종본 · 읽기 전용'}</span>${v.status==='draft'&&baseCan('merge')?'<button class="vbtn" data-act="final-done">최종본 확정</button>':''}${v.status==='done'&&baseCan('merge')?'<button class="vlink" data-act="final-reopen">다시 고치기</button>':''}`;
+  return `<div class="pchips" role="group" aria-label="담당자"><span class="pc-l">담당자</span>${ps.map(chip).join('')}${baseCan('edit')?'<button class="pchip add" data-act="p-add">＋ 추가</button>':''}${ps.length?'':'<span class="pc-hint">담당자를 추가하면 그 사람 로드맵을 따로 고칠 수 있습니다</span>'}${fs.length?`<span class="pc-sep" aria-hidden="true"></span><span class="pc-l">최종본</span>${fs.map(chip).join('')}`:''}</div>${info?`<div class="pinfo">${info}</div>`:''}`;
 }
 function verBanner(){
   if(!Cloud.on||Cloud.needSetup||!Cloud.ready||isPending()||ui.menu==='__merge'||ui.menu==='__perm')return '';
-  const v=Cloud.versions[ui.vid];if(!v)return '';const mine=v.vtype==='personal'&&Cloud.user&&v.owner===Cloud.user.uid;
-  if(mine)return `<div class="vbar mine"><div class="wrap"><span class="vbar-dot"></span><b>내 버전</b><span>고친 내용은 내 버전에만 저장됩니다${v.at?` · 마지막 저장 ${fmtAt(v.at)}`:''}</span>${latestFinal()?`<button class="vlink" data-act="ver-copy" data-vid="${latestFinal()}">최신 최종본으로 다시 시작</button>`:''}</div></div>`;
-  if(v.vtype==='final')return `<div class="vbar final"><div class="wrap"><span class="vbar-dot"></span><b>${esc(v.title||'최종본')}</b><span>${v.status==='draft'?'최종본 초안 · 확정 전에는 관리자가 고칠 수 있습니다':'확정된 최종본 · 읽기 전용'}</span>${v.status==='draft'&&baseCan('merge')?'<button class="vbtn" data-act="final-done">최종본 확정</button>':''}${v.status==='done'&&baseCan('merge')?'<button class="vlink" data-act="final-reopen">다시 고치기</button>':''}<button class="vlink" data-act="ver-copy" data-vid="${ui.vid}">이 내용으로 내 버전 다시 시작</button><button class="vlink" data-act="ver" data-vid="${myVid()}">내 버전으로</button></div></div>`;
-  return `<div class="vbar other"><div class="wrap"><span class="vbar-dot"></span><b>${esc(v.ownerName||'')}님의 버전</b><span>읽기 전용${v.at?` · 마지막 저장 ${fmtAt(v.at)}`:''}</span><button class="vlink" data-act="ver-copy" data-vid="${ui.vid}">이 내용으로 내 버전 다시 시작</button><button class="vbtn" data-act="ver" data-vid="${myVid()}">내 버전으로</button></div></div>`;
+  const cur=S.menus.find(m=>m.id===ui.menu)||visibleMenus()[0];if(cur&&cur.type==='roadmap')return '';
+  const html=verChips();return html?`<div class="vstrip"><div class="wrap">${html}</div></div>`:'';
 }
 
 /* ================= 통합 비교 ================= */
@@ -2025,6 +2065,9 @@ async function act(el){
   case 'vdd':ui.vdd=!ui.vdd;render();break;
   case 'ver':ui.vdd=false;switchVersion(el.dataset.vid);window.scrollTo(0,0);break;
   case 'ver-copy':await copyIntoMine(el.dataset.vid);break;
+  case 'p-add':await addPerson();break;
+  case 'p-ren':await renamePerson();break;
+  case 'p-del':await deletePerson();break;
   case 'final-done':{const v=Cloud.versions[ui.vid];if(!v)return;if(!(await ask('최종본으로 확정할까요?',`'${esc(v.title||'최종본')}'을 확정하면 읽기 전용이 되고, 담당자들이 이 내용으로 자기 버전을 다시 시작할 수 있습니다.`,'확정')))return;persist();await vdoc('ver_'+ui.vid).set({status:'done',doneAt:Date.now(),doneBy:myName()},{merge:true}).catch(e=>toast(errText(e)));ui.edit=false;toast('최종본으로 확정했습니다');break}
   case 'final-reopen':{await vdoc('ver_'+ui.vid).set({status:'draft'},{merge:true}).catch(e=>toast(errText(e)));toast('다시 고칠 수 있게 열었습니다');break}
   case 'mtab':ui.mtab=el.dataset.v;render();break;
